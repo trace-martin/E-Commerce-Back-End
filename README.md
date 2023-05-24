@@ -16,6 +16,7 @@ This is a backend database and app for an E-Commerce site. This project was buil
 ## Table of Contents:
 
 - [Criteria](#criteria)
+- [Preview](#preview)
 - [Installation](#installation)
 - [Technology](#technology)
 - [License](#license)
@@ -39,6 +40,10 @@ THEN the data for each of these routes is displayed in a formatted JSON
 WHEN I test API POST, PUT, and DELETE routes in Insomnia
 THEN I am able to successfully create, update, and delete data in my database
 ```
+## Preview:
+![AllProducts](https://github.com/trace-martin/Retail-Back-End/assets/123417800/6eee2c53-98cb-4dd0-a8f4-2d86cc59d923)
+![AllTags](https://github.com/trace-martin/Retail-Back-End/assets/123417800/858a6073-0f78-44f8-a944-66c0ad2b9a16)
+![CategoryOne](https://github.com/trace-martin/Retail-Back-End/assets/123417800/40775b3c-6002-4fe1-a237-30ffd86afe6f)
 
 ## Installation:
 
