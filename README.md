@@ -12,7 +12,7 @@ This is a backend database and app for an E-Commerce site. This project was buil
 - [Insomnia](https://insomnia.rest/)
 
 # Video Walkthrough:
-
+[Walkthrough](https://drive.google.com/file/d/1vdcLzd-4sy8E06KdWTxwCVUGA_IKn-ba/view)
 ## Table of Contents:
 
 - [Criteria](#criteria)
