@@ -10,8 +10,8 @@ router.get('/', (req, res) => {
   Product.findAll({
     attributes: ['id', 'product_name', 'price', 'stock'],
     include: [
-      { model: Category },
-      { model: Tag }
+      { model: Category, attributes: ['category_name'] },
+      { model: Tag, attributes: ['tag_name']}
     ]
   })
   .then(products => {
@@ -24,40 +24,45 @@ router.get('/', (req, res) => {
 });
 
 // get one product
-router.get('/:id', (req, res) => {
+router.get('/:id', async (req, res) => {
+  try {
+    const productId = req.params.id;
+
   // find a single product by its `id`
   // be sure to include its associated Category and Tag data
-  Product.findOne({
+  const product = await Product.findOne({
     where: {id: productId },
     attributes: ['id', 'product_name', 'price', 'stock'],
     include: [
-      { model: Category },
-      { model: Tag}
+      { model: Category, attributes: ['category_name'] },
+      { model: Tag, attributes: ['tag_name']}
     ]
-  })
-  .then(product => {
+  });
+
     if (!product) {
       res.status(404).json({ message: 'Product not found' });
     } else {
       res.json(product);
     }
-  })
-  .catch(err => {
+  }
+  catch(err) {
     console.log(err);
     res.status(500).json(err);
-  });
+  }
 });
 
 // create new product
 router.post('/', (req, res) => {
-  /* req.body should look like this...
-    {
-      product_name: "Basketball",
-      price: 200.00,
-      stock: 3,
-      tagIds: [1, 2, 3, 4]
-    }
-  */
+  const { product_name, price, stock, category_id, tagIds } = req.body
+
+  Product.create({
+    product_name: product_name,
+    price: price,
+    stock: stock,
+    category_id: category_id,
+    tagIds: tagIds,
+  })
+
   Product.create(req.body)
     .then((product) => {
       // if there's product tags, we need to create pairings to bulk create in the ProductTag model
@@ -122,8 +127,9 @@ router.put('/:id', (req, res) => {
     });
 });
 
-router.delete('/:id', (req, res) => {
-  // delete one product by its `id` value
-});
+// router.delete('/:id', (req, res) => {
+//   // delete one product by its `id` value
+//   Product.destroy(id)
+// });
 
 module.exports = router;
