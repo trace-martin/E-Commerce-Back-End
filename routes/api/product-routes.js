@@ -4,10 +4,10 @@ const { Product, Category, Tag, ProductTag } = require('../../models');
 // The `/api/products` endpoint
 
 // get all products
-router.get('/', (req, res) => {
+router.get('/', async (req, res) => {
   // find all products
   // be sure to include its associated Category and Tag data
-  Product.findAll({
+  await Product.findAll({
     attributes: ['id', 'product_name', 'price', 'stock'],
     include: [
       { model: Category, attributes: ['category_name'] },
@@ -52,18 +52,16 @@ router.get('/:id', async (req, res) => {
 });
 
 // create new product
-router.post('/', (req, res) => {
+router.post('/', async (req, res) => {
   const { product_name, price, stock, category_id, tagIds } = req.body
 
-  Product.create({
+  await Product.create({
     product_name: product_name,
     price: price,
     stock: stock,
     category_id: category_id,
     tagIds: tagIds,
   })
-
-  Product.create(req.body)
     .then((product) => {
       // if there's product tags, we need to create pairings to bulk create in the ProductTag model
       if (req.body.tagIds.length) {
@@ -86,8 +84,9 @@ router.post('/', (req, res) => {
 });
 
 // update product
+// update product data
 router.put('/:id', (req, res) => {
-  // update product data
+
   Product.update(req.body, {
     where: {
       id: req.params.id,
@@ -122,14 +121,26 @@ router.put('/:id', (req, res) => {
     })
     .then((updatedProductTags) => res.json(updatedProductTags))
     .catch((err) => {
-      // console.log(err);
+      console.log(err);
       res.status(400).json(err);
     });
 });
 
-// router.delete('/:id', (req, res) => {
-//   // delete one product by its `id` value
-//   Product.destroy(id)
-// });
+router.delete('/:id', async (req, res) => {
+  try{
+    const deleteId = req.params.id
+    // delete one product by its `id` value
+   const deleteProduct = await Product.destroy({
+      where: { id: deleteId },
+    });
+    if (!deleteProduct) {
+      return res.status(404).json({ error: "Product not found"})
+    }
+    res.json({ message: "Product deleted successfully" });
+  } catch (err) {
+    console.log(err);
+    res.status(500).json(err);
+  }
+});
 
 module.exports = router;
